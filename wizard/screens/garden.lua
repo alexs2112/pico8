@@ -29,6 +29,8 @@ function gdn_update()
 			else
 				plant_mode()
 			end
+		elseif btnp(🅾️) then
+			screen="menu"
 		end
 
 	elseif gdn.state==1 then
@@ -74,6 +76,8 @@ function plant()
 end
 
 function gdn_draw()
+	map(32,0)
+	top_bar()
 	sx=64-(gdn.max_plots*8+2)/2
 	sy=32
 	for i=1,gdn.max_plots do
