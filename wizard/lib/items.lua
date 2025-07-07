@@ -1,50 +1,35 @@
 function items_init()
+	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
 	plants={
 		name="plants",
-		{s=19,q=0,
-			n="fly agaric",
-			r=2,y=1,u=0},
-		{s=35,q=0,
-			n="hanging blossom",
-			r=1,y=0,u=2}
+		{s=19,q=0,n="fly agaric",r=2,y=1,u=0},
+		{s=35,q=0,n="hanging blossom",r=1,y=0,u=2}
 	}
+	--s:sprite,q:quantity,n:name,p:plant_sprite,g:grown_sprite
 	seeds={
 		name="seeds",
-		{s=20,q=2,p=16,g=19,
-			n="fly agaric"},
-		{s=36,q=5,p=32,g=35,
-			n="hanging blossom"}
+		{s=20,q=2,n="fly agaric",p=16,g=19},
+		{s=36,q=5,n="hanging blossom",p=32,g=35}
 	}
 end
 
 function get_seeds()
 	out={}
 	for v in all(seeds) do
-		if v.q>0 then add(out,v.s) end
+		if v.q>0 then add(out,v) end
 	end
 	return out
 end
 
-function p_by_s(s)
-	return p_by_s(s,false)
-end
-function p_by_s(s,subtract)
-	for v in all(seeds) do
-		if v.s==s then
-			if subtract then v.q-=1 end
-			return v.p
-		end
+function get(t,s)
+	for v in all(t) do
+		if v.s==s then return v end
 	end
 end
 
-function s_by_spr(s)
-	for v in all(seeds) do
-		if v.s==s then return v end
-	end
-end
-function p_by_spr(s)
-	for v in all(plants) do
-		if v.s==s then return v end
+function add_item(t,s,q)
+	for v in all(t) do
+		if v.s==s then v.q+=q end
 	end
 end
 

@@ -4,10 +4,10 @@ function gdn_init()
 		selected=1,
 		max_plots=3,
 		seeds={},
-		seed=1
+		seed=1,
+		plots={nil,nil,nil,nil,nil},
+		timers={0,0,0,0,0}
 	}
-	plots={nil,nil,nil,nil,nil}
-	gdn_timers={0,0,0,0,0}
 end
 
 function gdn_update()
@@ -24,7 +24,7 @@ function gdn_update()
 				gdn.selected=gdn.max_plots
 			end
 		elseif btnp(❎) then
-			if plots[gdn.selected] then
+			if gdn.plots[gdn.selected] then
 				harvest()
 			else
 				plant_mode()
@@ -47,12 +47,10 @@ function gdn_update()
 end
 
 function harvest()
-	plt=plots[gdn.selected]
+	plt=gdn.plots[gdn.selected]
 	if is_grown(plt) then
-		plots[gdn.selected]=nil
-		for v in all(plants) do
-			if v.s==plt then v.q+=1 end
-		end
+		gdn.plots[gdn.selected]=nil
+		add_item(plants,plt,1)
 	end
 end
 
@@ -65,12 +63,12 @@ function plant_mode()
 end
 
 function plant()
-	plt=plots[gdn.selected]
+	plt=gdn.plots[gdn.selected]
 	seed=gdn.seeds[gdn.seed]
 	if not plt then
-		plant_s=p_by_s(seed,true)
-		plots[gdn.selected]=plant_s
- 	gdn_timers[gdn.selected]=0
+		gdn.plots[gdn.selected]=seed.p
+		add_item(seeds,seed.s,-1)
+ 	gdn.timers[gdn.selected]=0
  	gdn.state=0
 	end
 end
@@ -79,7 +77,7 @@ function gdn_draw()
 	sx=64-(gdn.max_plots*8+2)/2
 	sy=32
 	for i=1,gdn.max_plots do
-		plt=plots[i]
+		plt=gdn.plots[i]
 		spr(6,sx,sy)
 		if plt~=nil then
 			spr(plt,sx,sy-8)
@@ -114,15 +112,14 @@ function draw_seed()
 	y=86
 	rect(x,y,x+9,y+9,9)
 	s=gdn.seeds[gdn.seed]
-	spr(s,x+1,y+1)
+	spr(s.s,x+1,y+1)
 	x+=12
 	y+=3
-	s=s_by_spr(s)
 	print(s.q.." "..s.n,x,y,7)
 	y+=8
 
 	--draw seed attributes--
-	p=p_by_spr(s.g)
+	p=get(plants,s.g)
 	print("stats",x,y,6)
 	x+=22
 	if p then
@@ -143,15 +140,15 @@ end
 
 function gdn_tick()
 	for i=1,gdn.max_plots do
-		if plots[i]==nil then
+		if gdn.plots[i]==nil then
 			--skip
 		else
-			gdn_timers[i]+=1
-			if gdn_timers[i]>60 then
-				if not is_grown(plots[i]) then
-					plots[i]+=1
+			gdn.timers[i]+=1
+			if gdn.timers[i]>60 then
+				if not is_grown(gdn.plots[i]) then
+					gdn.plots[i]+=1
 				end
-				gdn_timers[i]=0
+				gdn.timers[i]=0
 			end
 		end
 	end
