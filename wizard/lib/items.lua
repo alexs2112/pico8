@@ -2,20 +2,30 @@ function items_init()
 	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
 	plants={
 		name="plants",
-		{s=19,q=0,n="fly agaric",r=2,y=1,u=0},
-		{s=35,q=0,n="hanging blossom",r=1,y=0,u=2}
+		{s=67,q=1,n="fly agaric",r=1,y=0,u=0},
+		{s=83,q=1,n="hanging blossom",r=0,y=1,u=1}
 	}
 	--s:sprite,q:quantity,n:name,p:plant_sprite,g:grown_sprite
 	seeds={
 		name="seeds",
-		{s=20,q=2,n="fly agaric",p=16,g=19},
-		{s=36,q=5,n="hanging blossom",p=32,g=35}
+		{s=68,q=2,n="fly agaric",p=64,g=67},
+		{s=84,q=5,n="hanging blossom",p=80,g=83}
+	}
+	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
+	pots={
+		name="potions",
+		{s=128,q=0,n="ash",r=0,y=0,u=0}, --shouldn't happen--
+		{s=129,q=0,n="potion",r=1,y=0,u=0},
+		{s=130,q=0,n="potion",r=0,y=1,u=1},
+		{s=131,q=0,n="potion",r=1,y=1,u=1},
+		{s=132,q=0,n="potion",r=2,y=0,u=0},
+		{s=133,q=0,n="potion",r=0,y=2,u=2},
 	}
 end
 
-function get_seeds()
+function get_t(t)
 	out={}
-	for v in all(seeds) do
+	for v in all(t) do
 		if v.q>0 then add(out,v) end
 	end
 	return out
@@ -55,5 +65,50 @@ function draw_table(t,i)
 			end
 		end
 	end
-	if none then print("none",x,y,6)	end		
+	if none then print("none",x,y,6) end
+end
+
+function draw_dots(max,index)
+	y=78
+	x=64-(max*6)/2
+	for i=1,max do
+		c=6
+		if i==index then c=7 end
+		print("◆",x,y,c)
+		x+=6
+	end
+end
+
+function draw_item(t,i)
+	x=16
+	y=86
+	rect(x,y,x+9,y+9,9)
+	s=t[i]
+	spr(s.s,x+1,y+1)
+	x+=12
+	y+=3
+	print(s.q.." "..s.n,x,y,7)
+	y+=8
+
+	--draw item stats--
+	p=get(plants,s.g)
+	if p then s=p end
+	print("stats",x,y,6)
+	x+=22
+	statbar(s,x,y)
+end
+
+function statbar(s,sx,sy)
+	for i=1,s.r do
+		print("✽",sx,sy,8)
+		sx+=6
+	end
+	for i=1,s.y do
+		print("✽",sx,sy,10)
+		sx+=6
+	end
+	for i=1,s.u do
+		print("✽",sx,sy,12)
+		sx+=6
+	end
 end

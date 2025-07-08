@@ -57,7 +57,7 @@ function harvest()
 end
 
 function plant_mode()
-	gdn.seeds=get_seeds()
+	gdn.seeds=get_t(seeds)
 	max_seeds=count(gdn.seeds)
 	if max_seeds>0 then gdn.state=1 end
 	if gdn.seed>max_seeds then gdn.seed=max_seeds end
@@ -70,8 +70,8 @@ function plant()
 	if not plt then
 		gdn.plots[gdn.selected]=seed.p
 		add_item(seeds,seed.s,-1)
- 	gdn.timers[gdn.selected]=0
- 	gdn.state=0
+		gdn.timers[gdn.selected]=0
+		gdn.state=0
 	end
 end
 
@@ -95,50 +95,8 @@ function gdn_draw()
 		draw_table(seeds,0)
 		draw_table(plants,1)
 	else
-		draw_dots()
-		draw_seed()
-	end
-end
-
-function draw_dots()
-	y=78
-	x=64-(max_seeds*6)/2
-	for i=1,max_seeds do
-		c=6
-		if i==gdn.seed then c=7 end
-		print("◆",x,y,c)
-		x+=6
-	end
-end
-
-function draw_seed()
-	x=16
-	y=86
-	rect(x,y,x+9,y+9,9)
-	s=gdn.seeds[gdn.seed]
-	spr(s.s,x+1,y+1)
-	x+=12
-	y+=3
-	print(s.q.." "..s.n,x,y,7)
-	y+=8
-
-	--draw seed attributes--
-	p=get(plants,s.g)
-	print("stats",x,y,6)
-	x+=22
-	if p then
-		for i=1,p.r do
-			print("✽",x,y,8)
-			x+=8
-		end
-		for i=1,p.y do
-			print("✽",x,y,10)
-			x+=8
-		end
-		for i=1,p.u do
-			print("✽",x,y,12)
-			x+=8
-		end
+		draw_dots(max_seeds,gdn.seed)
+		draw_item(gdn.seeds,gdn.seed)
 	end
 end
 
@@ -148,7 +106,7 @@ function gdn_tick()
 			--skip
 		else
 			gdn.timers[i]+=1
-			if gdn.timers[i]>60 then
+			if gdn.timers[i]>30 then
 				if not is_grown(gdn.plots[i]) then
 					gdn.plots[i]+=1
 				end
