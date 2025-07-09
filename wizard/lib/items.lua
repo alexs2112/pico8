@@ -2,8 +2,8 @@ function items_init()
 	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
 	plants={
 		name="plants",
-		{s=67,q=1,n="fly agaric",r=1,y=0,u=0},
-		{s=83,q=1,n="hanging blossom",r=0,y=1,u=1}
+		{s=67,q=5,n="fly agaric",r=1,y=0,u=0},
+		{s=83,q=5,n="hanging blossom",r=0,y=1,u=1}
 	}
 	--s:sprite,q:quantity,n:name,p:plant_sprite,g:grown_sprite
 	seeds={
@@ -48,24 +48,32 @@ function draw_table(t,i)
 	x=sx
 	y=80
 	print(t.name,sx,y,7)
-	y+=10
+	y+=8
 	i=0
 	none=true
 	for v in all(t) do
 		if v.q>0 then
 			none=false
 			spr(v.s,x,y)
-			print(v.q,x+10,y+2)
-			if i>=3 then
+			draw_tiny(v.q,x+6,y+4)
+			if i>=4 then
 				i=0
 				x=sx
+				y+=10
 			else
-				x+=18
+				x+=10
 				i+=1
 			end
 		end
 	end
 	if none then print("none",x,y,6) end
+end
+
+function draw_tiny(int,dx,dy)
+	dtx=96 dty=24
+	dtx+=3*((int-1)%5)
+	dty+=4*flr((int-1)/5)
+	sspr(dtx,dty,3,4,dx,dy)
 end
 
 function draw_dots(max,index)

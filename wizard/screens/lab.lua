@@ -46,7 +46,8 @@ function lab_update()
 		elseif lab.state==1 then
 			add_plant()
 			set_plants()
-			if count(lab.plants)==0 then lab.state=0 end
+			if count(lab.plants)==0 then lab.state=0
+			elseif count(lab.soup)>=lab.max then lab.state=0 end
 		end
 	end
 end
