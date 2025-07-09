@@ -5,6 +5,7 @@ function store_init()
 		i=1
 	}
 	store_refresh()
+	crow_refresh()
 end
 
 function store_refresh()
@@ -13,15 +14,26 @@ function store_refresh()
 	if str.i<=0 then str.i=1 end
 end
 
+function crow_refresh()
+	str.seeds={}
+	for v in all(seeds) do
+		if v.b==1 then add(str.seeds,v) end
+	end
+end
+
 function store_update()
 	if str.s==0 then
 		if btnp(🅾️) then screen="menu"
 		elseif btnp(❎) then
+			str.i=1
 			if str.p==0 then screen="menu"
-			elseif str.p==2 then
+			elseif str.p==1 then
+				str.s=1
+				crow_refresh()
+			else --str.p==2
 				str.s=1
 				store_refresh()
-			else str.s=1 end
+			end
 		elseif btnp(⬅️) then
 			if str.p<2 then str.p+=1 end
 		elseif btnp(➡️) then
@@ -29,8 +41,8 @@ function store_update()
 		end
 	elseif str.s==1 then
 		local max=0
-		if str.p==1 then max=count(str.pots) --buying
-		elseif str.p==2 then max=0 --selling
+		if str.p==1 then max=count(str.seeds) --buying
+		elseif str.p==2 then max=count(str.pots) --selling
 		end
 
 		if btnp(🅾️) then str.s=0
@@ -45,13 +57,21 @@ function store_update()
 			if str.p==2 and count(str.pots)>0 then
 				p=str.pots[str.i]
 				add_item(pots,p.s,-1)
+				msg="sold "..p.n
 				gold+=p.v
 				store_refresh()
-				if count(str.pots)==0 then str.i=0 end
+				if count(str.pots)==0 then str.s=0 end
 
 			--buying
 			else
-				--pass
+				s=str.seeds[str.i]
+				if gold<s.v then
+					msg="cannot afford"
+				else
+					msg="bought "..s.n.." seed"
+					gold-=s.v
+					add_item(seeds,s.s,1)
+				end
 			end
 		end
 	end
@@ -60,7 +80,6 @@ end
 function store_draw()
 	map(32,0)
 	top_bar()
-	print(str.s.." "..str.p.." "..str.i, 16,16,7)
 
 	spr(23,96,48)
 	spr(33,56,48)
@@ -77,6 +96,8 @@ function store_draw()
 			else
 				print("no potions to sell...",16,96,6)
 			end
+		else
+			draw_item(str.seeds,str.i)
 		end
 	else
 		draw_table(pots,0)
