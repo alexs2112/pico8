@@ -1,4 +1,6 @@
 function items_init()
+	gold=10
+
 	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
 	plants={
 		name="plants",
@@ -11,15 +13,15 @@ function items_init()
 		{s=68,q=2,n="fly agaric",p=64,g=67},
 		{s=84,q=5,n="hanging blossom",p=80,g=83}
 	}
-	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
+	--s:sprite,q:quantity,n:name,v:value,r:red,y:yellow,u:blue
 	pots={
 		name="potions",
-		{s=128,q=0,n="ash",r=0,y=0,u=0}, --shouldn't happen--
-		{s=129,q=0,n="potion",r=1,y=0,u=0},
-		{s=130,q=0,n="potion",r=0,y=1,u=1},
-		{s=131,q=0,n="potion",r=1,y=1,u=1},
-		{s=132,q=0,n="potion",r=2,y=0,u=0},
-		{s=133,q=0,n="potion",r=0,y=2,u=2},
+		{s=128,q=0,n="ash",v=0,r=0,y=0,u=0}, --shouldn't happen--
+		{s=129,q=0,n="potion",v=2,r=1,y=0,u=0},
+		{s=130,q=0,n="potion",v=2,r=0,y=1,u=1},
+		{s=131,q=0,n="potion",v=5,r=1,y=1,u=1},
+		{s=132,q=0,n="potion",v=4,r=2,y=0,u=0},
+		{s=133,q=0,n="potion",v=4,r=0,y=2,u=2},
 	}
 end
 
@@ -76,18 +78,15 @@ function draw_tiny(int,dx,dy)
 	sspr(dtx,dty,3,4,dx,dy)
 end
 
-function draw_dots(max,index)
+function draw_item(t,i)
 	y=78
-	x=64-(max*6)/2
-	for i=1,max do
+	x=64-(count(t)*6)/2
+	for i2=1,count(t) do
 		c=6
-		if i==index then c=7 end
+		if i2==i then c=7 end
 		print("◆",x,y,c)
 		x+=6
 	end
-end
-
-function draw_item(t,i)
 	x=16
 	y=86
 	rect(x,y,x+9,y+9,9)
@@ -101,6 +100,7 @@ function draw_item(t,i)
 	--draw item stats--
 	p=get(plants,s.g)
 	if p then s=p end
+	if s.v then print("●"..s.v,x,y,10) y+=8 end
 	print("stats",x,y,6)
 	x+=22
 	statbar(s,x,y)

@@ -68,7 +68,6 @@ function lab_draw()
 		draw_table(plants,0)
 		draw_table(pots,1)
 	else
-		draw_dots(count(lab.plants),lab.i)
 		draw_item(lab.plants,lab.i)
 	end
 

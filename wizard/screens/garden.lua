@@ -95,7 +95,6 @@ function gdn_draw()
 		draw_table(seeds,0)
 		draw_table(plants,1)
 	else
-		draw_dots(max_seeds,gdn.seed)
 		draw_item(gdn.seeds,gdn.seed)
 	end
 end

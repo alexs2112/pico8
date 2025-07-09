@@ -3,6 +3,7 @@ function _init()
 	items_init()
 	gdn_init()
 	lab_init()
+	store_init()
 	screen="start"
 	msg=""
 	err="" --debug--
@@ -21,6 +22,8 @@ function _update()
 			gdn_update()
 		elseif screen=="alchemy lab" then
 			lab_update()
+		elseif screen=="storefront" then
+			store_update()
 		end
 	end
 end
@@ -36,6 +39,8 @@ function _draw()
 			gdn_draw()
 		elseif screen=="alchemy lab" then
 			lab_draw()
+		elseif screen=="storefront" then
+			store_draw()
 		end
 	end
 	print(msg,8,16,7)
@@ -43,6 +48,6 @@ function _draw()
 end
 
 function top_bar()
-	print("●9999",4,3,10)
+	print("●"..gold,4,3,10)
 	print("⧗04:59",94,3,7)
 end
