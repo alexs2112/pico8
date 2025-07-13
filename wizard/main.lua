@@ -4,6 +4,8 @@ function _init()
 	gdn_init()
 	lab_init()
 	store_init()
+	bed_init()
+	p_init()
 	screen="start"
 	msg=""
 	err="" --debug--
@@ -16,6 +18,7 @@ function _update()
 		if btnp(❎) or btnp(🅾️) then msg="" err="" end
 		gdn_tick()
 		lab_tick()
+		p_tick()
 		if screen=="menu" then
 			menu_update()
 		elseif screen=="garden" then
@@ -24,6 +27,8 @@ function _update()
 			lab_update()
 		elseif screen=="storefront" then
 			store_update()
+		elseif screen=="bedroom" then
+			bed_update()
 		end
 	end
 end
@@ -41,6 +46,8 @@ function _draw()
 			lab_draw()
 		elseif screen=="storefront" then
 			store_draw()
+		elseif screen=="bedroom" then
+			bed_draw()
 		end
 	end
 	print(msg,8,16,7)

@@ -5,7 +5,7 @@ function menu_init()
 			"storefront",
 			"garden",
 			"alchemy lab",
-			"retire for the night"
+			"bedroom"
 		}
 	}
 end
