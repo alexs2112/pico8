@@ -81,7 +81,7 @@ function store_draw()
 	map(32,0)
 	top_bar()
 
-	spr(23,96,48)
+	spr(22,96,48)
 	spr(33,56,48)
 	spr(32,28,48)
 	px=96

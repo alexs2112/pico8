@@ -4,14 +4,14 @@ function items_init()
 	--s:sprite,q:quantity,n:name,r:red,y:yellow,u:blue
 	plants={
 		name="plants",
-		{s=67,q=2,n="fly agaric",r=1,y=0,u=0},
-		{s=83,q=2,n="hanging blossom",r=0,y=1,u=1}
+		{s=67,q=1,n="fly agaric",r=1,y=0,u=0},
+		{s=83,q=1,n="hanging blossom",r=0,y=1,u=1}
 	}
 	--s:sprite,q:quantity,n:name,p:plant_sprite,g:grown_sprite,b:buyable,v=value
 	seeds={
 		name="seeds",
-		{s=68,q=1,n="fly agaric",p=64,g=67,b=1,v=1},
-		{s=84,q=1,n="hanging blossom",p=80,g=83,b=1,v=2}
+		{s=68,q=2,n="fly agaric",p=64,g=67,b=1,v=1},
+		{s=84,q=2,n="hanging blossom",p=80,g=83,b=1,v=2}
 	}
 	--s:sprite,q:quantity,n:name,v:value,r:red,y:yellow,u:blue
 	pots={
@@ -99,8 +99,8 @@ function draw_item(t,i)
 
 	--draw item stats--
 	if s.v then print("gold: ●"..s.v,x,y,10) y+=8 end
-	p=get(plants,s.g)
-	if p then s=p end
+	pl=get(plants,s.g)
+	if pl then s=pl end
 	print("stats",x,y,6)
 	x+=22
 	statbar(s,x,y)

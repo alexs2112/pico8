@@ -6,31 +6,37 @@ function gdn_init()
 		seeds={},
 		seed=1,
 		plots={nil,nil,nil,nil,nil},
+		pos={0,0,0,0,0},
 		timers={0,0,0,0,0}
 	}
 end
 
+function gdn_enter()
+	p.x=20
+	p.f=false
+	door_init()
+	door_add(12)
+	for i=1,gdn.max_plots do
+		gdn.pos[i]=(108/(gdn.max_plots+1))*i+20
+	end
+end
+
 function gdn_update()
 	if gdn.state==0 then
-		--select plant--
-		if btnp(➡️) then
-			gdn.selected+=1
-			if gdn.selected>gdn.max_plots then
-				gdn.selected=1
+		p_update()
+		if btnp(❎) then
+			if door_enter() then return end
+			for i=1,gdn.max_plots do
+				plot=gdn.pos[i]
+				if p.x>plot-8 and p.x<plot+8 then
+					gdn.selected=i
+					if gdn.plots[gdn.selected] then
+						harvest()
+					else
+						plant_mode()
+					end
+				end
 			end
-		elseif btnp(⬅️) then
-			gdn.selected-=1
-			if gdn.selected==0 then
-				gdn.selected=gdn.max_plots
-			end
-		elseif btnp(❎) then
-			if gdn.plots[gdn.selected] then
-				harvest()
-			else
-				plant_mode()
-			end
-		elseif btnp(🅾️) then
-			screen="menu"
 		end
 
 	elseif gdn.state==1 then
@@ -53,6 +59,9 @@ function harvest()
 	if is_grown(plt) then
 		gdn.plots[gdn.selected]=nil
 		add_item(plants,plt,1)
+		for pl in all(plants) do
+			if pl.s==plt then msg="harvested "..pl.n end
+		end
 	end
 end
 
@@ -72,24 +81,26 @@ function plant()
 		add_item(seeds,seed.s,-1)
 		gdn.timers[gdn.selected]=0
 		gdn.state=0
+		msg="planted "..seed.n
 	end
 end
 
 function gdn_draw()
 	map(32,0)
 	top_bar()
-	sx=64-(gdn.max_plots*8+2)/2
-	sy=32
+	door_draw()
+	p_draw()
+	sy=48
 	for i=1,gdn.max_plots do
 		plt=gdn.plots[i]
+		sx=gdn.pos[i]
 		spr(6,sx,sy)
 		if plt~=nil then
-			spr(plt,sx,sy-8)
+			spr(plt,sx,sy-4)
 		end
-		if gdn.selected==i then
-			spr(1,sx,sy+10)
+		if p.x>sx-8 and p.x<sx+8 and gdn.state==0 and (plt==nil or is_grown(plt)) then
+			print("❎",sx,p.y+18,6)
 		end
-		sx+=10
 	end
 	if gdn.state==0 then
 		draw_table(seeds,0)

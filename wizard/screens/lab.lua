@@ -34,9 +34,9 @@ function lab_update()
 		if lab.i>count(lab.plants) then lab.i=1 end
 	elseif btnp(❎) then
 		if lab.done then
-			p=get_pot()
-			p.q+=1
-			msg="received "..p.n
+			pl=get_pot()
+			pl.q+=1
+			msg="received "..pl.n
 			lab.done=false
 			lab.soup={}
 			lab.time=0
