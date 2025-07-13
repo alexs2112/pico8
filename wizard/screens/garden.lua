@@ -86,6 +86,7 @@ function plant()
 end
 
 function gdn_draw()
+	draw_floor(6,120)
 	map(32,0)
 	top_bar()
 	door_draw()
@@ -94,6 +95,8 @@ function gdn_draw()
 	for i=1,gdn.max_plots do
 		plt=gdn.plots[i]
 		sx=gdn.pos[i]
+		circfill(sx+3,sy+8,8,1)
+		line(sx-1,sy,sx+7,sy,1)
 		spr(6,sx,sy)
 		if plt~=nil then
 			spr(plt,sx,sy-4)

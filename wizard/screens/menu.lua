@@ -23,6 +23,8 @@ function menu_update()
 			gdn_enter()
 		elseif screen=="bedroom" then
 			bed_enter()
+		elseif screen=="alchemy lab" then
+			lab_enter()
 		end
 	end
 end

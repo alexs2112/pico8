@@ -9,6 +9,14 @@ function lab_init()
 		max=2, --out of 3--
 		done=false
 	}
+	caul_x=48
+end
+
+function lab_enter()
+	p.x=20
+	p.f=false
+	door_init()
+	door_add(12)
 end
 
 function lab_tick()
@@ -23,27 +31,33 @@ function lab_tick()
 end
 
 function lab_update()
-	if btnp(🅾️) then
-		if lab.state==0 then screen="menu"
-		else lab.state=0 end
-	elseif btnp(⬅️) then
-		lab.i-=1
-		if lab.i<=0 then lab.i=count(lab.plants) end
-	elseif btnp(➡️) then
-		lab.i+=1
-		if lab.i>count(lab.plants) then lab.i=1 end
-	elseif btnp(❎) then
-		if lab.done then
-			pl=get_pot()
-			pl.q+=1
-			msg="received "..pl.n
-			lab.done=false
-			lab.soup={}
-			lab.time=0
-		elseif lab.state==0 then
-			set_plants()
-			if count(lab.plants)>0 then lab.state=1 end
-		elseif lab.state==1 then
+	if lab.state==0 then
+		p_update2(6,caul_x-7)
+		if btnp(❎) then
+			if door_enter() then return end
+			if p.x>caul_x-12 and p.x<caul_x+8 then
+				if lab.done then
+					pl=get_pot()
+					pl.q+=1
+					msg="received "..pl.n
+					lab.done=false
+					lab.soup={}
+					lab.time=0
+				else
+					set_plants()
+					if count(lab.plants)>0 then lab.state=1 end
+				end
+			end
+		end
+	else
+		if btnp(🅾️) then lab.state=0
+		elseif btnp(⬅️) then
+			lab.i-=1
+			if lab.i<=0 then lab.i=count(lab.plants) end
+		elseif btnp(➡️) then
+			lab.i+=1
+			if lab.i>count(lab.plants) then lab.i=1 end
+		elseif btnp(❎) then
 			add_plant()
 			set_plants()
 			if count(lab.plants)==0 then lab.state=0
@@ -59,10 +73,12 @@ function set_plants()
 end
 
 function lab_draw()
+	draw_floor(6,caul_x+12)
 	map(32,0)
 	top_bar()
-	spr(48,60,60)
-	spr(1,36,60)
+	door_draw()
+	p_draw()
+	spr(48,caul_x,p.y)
 
 	if lab.state==0 then
 		draw_table(plants,0)
@@ -71,11 +87,18 @@ function lab_draw()
 		draw_item(lab.plants,lab.i)
 	end
 
-	rect(74,32,77,68,5)
-	if lab.time>0 then
-		rectfill(75,67,76,67-flr(34*(lab.time/lab.max_time)),10)
+	if p.x>caul_x-12 and p.x<caul_x+8 then
+		if lab.state==0 and (lab.done or count(lab.soup)<lab.max and count(lab.plants)>0) then
+			print("❎",caul_x,p.y-8,6)
+		end
 	end
-	x=80 y=58
+
+	x=caul_x+16 y=56
+	rect(x,30,x+3,66,5)
+	if lab.time>0 then
+		rectfill(x+1,65,x+2,65-flr(34*(lab.time/lab.max_time)),10)
+	end
+	x+=6
 	for i=1,3 do
 		rect(x,y,x+9,y+9,5)
 		if i>lab.max then spr(7,x+1,y+1) end
@@ -90,9 +113,6 @@ function lab_draw()
 		spr(get_pot().s,x-8,y)
 		statbar(get_pot(),x+4,y+3)
 	elseif lab.time>0 then spr(8,x-8,y) end
-
-	--Temp--
-	if lab.done then spr(49,60,52) end
 end
 
 function add_plant()

@@ -58,3 +58,11 @@ function top_bar()
 	print("●"..gold,4,3,10)
 	print("⧗04:59",94,3,7)
 end
+
+function draw_floor(x1,x2)
+	while x1<x2 do
+		spr(21,x1+1,p.y+8)
+		x1+=8
+	end
+	if x1>x2 then rectfill(x2+1,p.y+8,x1,p.y+11,1) end
+end

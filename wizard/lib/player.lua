@@ -20,7 +20,7 @@ function p_tick()
 end
 
 function p_update()
-	p_update2(4,116)
+	p_update2(6,114)
 end
 function p_update2(minx,maxx)
 	if btn(➡️) then
