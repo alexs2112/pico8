@@ -4,8 +4,18 @@ function store_init()
 		s=0,
 		i=1
 	}
+	sellx=32
+	crowx=64
 	store_refresh()
 	crow_refresh()
+end
+
+function store_enter()
+	p.x=102
+	p.f=true
+	str.p=0
+	door_init()
+	door_add(112)
 end
 
 function store_refresh()
@@ -23,23 +33,20 @@ end
 
 function store_update()
 	if str.s==0 then
-		if btnp(🅾️) then screen="menu"
-		elseif btnp(❎) then
-			str.i=1
-			if str.p==0 then screen="menu"
-			elseif str.p==1 then
+		p_update()
+		if btnp(❎) then
+			if door_enter() then return
+			elseif p.x>crowx-8 and p.x<crowx+8 then
 				str.s=1
+				str.p=1
 				crow_refresh()
-			else --str.p==2
+			elseif p.x>sellx-8 and p.x<sellx+8 then
 				str.s=1
+				str.p=2
 				store_refresh()
 			end
-		elseif btnp(⬅️) then
-			if str.p<2 then str.p+=1 end
-		elseif btnp(➡️) then
-			if str.p>0 then str.p-=1 end
 		end
-	elseif str.s==1 then
+	else
 		local max=0
 		if str.p==1 then max=count(str.seeds) --buying
 		elseif str.p==2 then max=count(str.pots) --selling
@@ -55,10 +62,10 @@ function store_update()
 		elseif btnp(❎) then
 			--selling--
 			if str.p==2 and count(str.pots)>0 then
-				p=str.pots[str.i]
-				add_item(pots,p.s,-1)
-				msg="sold "..p.n
-				gold+=p.v
+				pot=str.pots[str.i]
+				add_item(pots,pot.s,-1)
+				msg="sold "..pot.n
+				gold+=pot.v
 				store_refresh()
 				if count(str.pots)==0 then str.s=0 end
 
@@ -78,16 +85,23 @@ function store_update()
 end
 
 function store_draw()
+	draw_floor(28,120)
 	map(32,0)
 	top_bar()
+	door_draw()
 
-	spr(22,96,48)
-	spr(33,56,48)
-	spr(32,28,48)
-	px=96
-	if str.p==1 then px=64
-	elseif str.p==2 then px=36 end
-	spr(1,px,48)
+	spr(34,crowx,p.y)
+	spr(33,crowx,p.y-6,1,1,p.x<crowx)
+	p_draw()
+	spr(32,sellx,p.y)
+
+	if str.s==0 then
+		if p.x>crowx-8 and p.x<crowx+8 then
+			print("❎",crowx,p.y+14,6)
+		elseif p.x>sellx-8 and p.x<sellx+8 then
+			print("❎",sellx,p.y+14,6)
+		end
+	end
 
 	if str.s==1 then
 		if str.p==2 then

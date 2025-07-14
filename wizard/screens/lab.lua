@@ -17,6 +17,7 @@ function lab_enter()
 	p.f=false
 	door_init()
 	door_add(12)
+	set_plants()
 end
 
 function lab_tick()

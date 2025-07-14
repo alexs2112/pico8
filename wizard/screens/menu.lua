@@ -19,12 +19,14 @@ function menu_update()
 		if menu.i<1 then menu.i=count(menu.opts) end
 	elseif btnp(❎) then
 		screen=menu.opts[menu.i]
-		if screen=="garden" then
+		if screen=="storefront" then
+			store_enter()
+		elseif screen=="garden" then
 			gdn_enter()
-		elseif screen=="bedroom" then
-			bed_enter()
 		elseif screen=="alchemy lab" then
 			lab_enter()
+		elseif screen=="bedroom" then
+			bed_enter()
 		end
 	end
 end

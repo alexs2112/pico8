@@ -64,5 +64,5 @@ function draw_floor(x1,x2)
 		spr(21,x1+1,p.y+8)
 		x1+=8
 	end
-	if x1>x2 then rectfill(x2+1,p.y+8,x1,p.y+11,1) end
+	if x1>x2 then rectfill(x2+1,p.y+8,x1,p.y+12,1) end
 end
